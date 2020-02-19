@@ -7,7 +7,7 @@ var request = require('request');
 
 var Twit = require("twit");
 
-var config = require('./config')
+var config = require('./configr')
 
 
 var T = new Twit(config)
