@@ -7,10 +7,10 @@ var request = require('request');
 
 var Twit = require("twit");
 
-var config = require('./configr')
+var config = require('./configr');
 
 
-var T = new Twit(config)
+var T = new Twit(config);
 
 var app = express();
 app.use(logger('dev'));
@@ -50,5 +50,5 @@ function demo () {
     });
 }
 
-demo()
+demo();
 setInterval(demo, 1000*60*60);
