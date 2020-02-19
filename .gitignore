@@ -1,7 +1,3 @@
 node_modules
-message.txt
-newdb.txt
-index.js
-stream.js
-.eslintrc.js
 config.js
+configr.js
