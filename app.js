@@ -7,10 +7,10 @@ var request = require('request');
 
 var Twit = require("twit");
 
-var config = require('./configr')
+var config = require('./configr');
 
 
-var T = new Twit(config)
+var T = new Twit(config);
 
 var app = express();
 app.use(logger('dev'));
@@ -22,20 +22,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 var express = require('express');
 
 function demo () {
-    request('https://type.fit/api/quotes', { json: true }, (err, res, body) => {
+    request('https://type.fit/api/quotes', { json: true }, function (err, res, body) {
         if (err) { return console.log(err); }
         
-        var min =1; 
-        var max =1643;  
-        var r = Math.floor(Math.random() * (+max - +min)) + +min;
+        var min = 1; 
+        var max = 1643;  
+        var r = Math.floor(Math.random() * (max - min)) + min;
         
 
         function tweetIt() {
             var tweet = {
                 status: body[r].text + " - " + body[r].author
-            }
+            };
 
-            T.post('statuses/update', tweet, tweeted)
+            T.post('statuses/update', tweet, tweeted);
 
             function tweeted(err, data, response) {
                 if (err) {
@@ -50,5 +50,5 @@ function demo () {
     });
 }
 
-demo()
+demo();
 setInterval(demo, 1000*60*60);
