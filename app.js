@@ -52,3 +52,16 @@ function demo () {
 
 demo();
 setInterval(demo, 1000*60*60);
+
+var stream = T.stream("statuses/filter", {
+  track: ["#rustlang", "javascript", "js", "#javascript", "#js"],
+  language: "en",
+});
+
+function retweet(tweet) {
+  T.post("statuses/retweet/:id", { id: tweet.id_str });
+}
+
+stream.on("tweet", function (tweet) {
+  retweet(tweet);
+});
