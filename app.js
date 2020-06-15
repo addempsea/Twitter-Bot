@@ -1,67 +1,75 @@
+const Twit = require("twit");
+const dotenv = require("dotenv");
+const request = require("request");
 
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var request = require('request');
+dotenv.config();
+const T = new Twit({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token: process.env.ACCESS_TOKEN,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET,
+});
 
-var Twit = require("twit");
+function postQuotes() {
+  request("https://type.fit/api/quotes", { json: true }, function (
+    err,
+    res,
+    body
+  ) {
+    if (err) {
+      return console.log(err);
+    }
 
-var config = require('./configr');
+    const min = 1;
+    const max = 1643;
+    const r = Math.floor(Math.random() * (max - min)) + min;
 
+    function tweetIt() {
+      const tweet = {
+        status: body[r].text + " - " + body[r].author,
+      };
+      T.post("statuses/update", tweet, tweeted);
 
-var T = new Twit(config);
+      function tweeted(err, data, response) {
+        if (err) {
+          console.log(err.twitterReply);
 
-var app = express();
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-var express = require('express');
-
-function demo () {
-    request('https://type.fit/api/quotes', { json: true }, function (err, res, body) {
-        if (err) { return console.log(err); }
-        
-        var min = 1; 
-        var max = 1643;  
-        var r = Math.floor(Math.random() * (max - min)) + min;
-        
-
-        function tweetIt() {
-            var tweet = {
-                status: body[r].text + " - " + body[r].author
-            };
-
-            T.post('statuses/update', tweet, tweeted);
-
-            function tweeted(err, data, response) {
-                if (err) {
-                    console.log('something went wrong');
-                } else {
-                    console.log('Tweet sent');
-                }
-            }
+          console.log("something went wrong");
+        } else {
+          console.log("Tweet sent");
         }
+      }
+    }
 
-        return tweetIt();
-    });
+    return tweetIt();
+  });
 }
 
-demo();
-setInterval(demo, 1000*60*60);
+postQuotes();
+setInterval(postQuotes, 1000 * 60 * 60);
 
-var stream = T.stream("statuses/filter", {
-  track: ["#rustlang", "javascript", "js", "#javascript", "#js"],
+const stream = T.stream("statuses/filter", {
+  track: [
+    "#rustlang",
+    "javascript",
+    "nodejs",
+    "#javascript",
+    "#js",
+    "#vuejs",
+    "#vue",
+  ],
   language: "en",
 });
 
 function retweet(tweet) {
-  T.post("statuses/retweet/:id", { id: tweet.id_str });
+  try {
+    T.post("statuses/retweet/:id", { id: tweet.id_str });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 stream.on("tweet", function (tweet) {
   retweet(tweet);
+  console.log("retweeted");
 });
