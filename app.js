@@ -33,14 +33,13 @@ function postQuotes() {
       function tweeted(err, data, response) {
         if (err) {
           console.log(err.twitterReply);
-
           console.log("something went wrong");
         } else {
+          tweetIt();
           console.log("Tweet sent");
         }
       }
     }
-
     return tweetIt();
   });
 }
@@ -63,7 +62,14 @@ const stream = T.stream("statuses/filter", {
 
 function retweet(tweet) {
   try {
-    T.post("statuses/retweet/:id", { id: tweet.id_str });
+    T.post("statuses/retweet/:id", { id: tweet.id_str }, function (e, data, response) {
+      if (e) {
+        console.log(e.twitterReply);
+        console.log("something went wrong");
+      } else {
+        console.log("retweeted");
+      }
+    });
   } catch (e) {
     console.log(e);
   }
@@ -71,5 +77,5 @@ function retweet(tweet) {
 
 stream.on("tweet", function (tweet) {
   retweet(tweet);
-  console.log("retweeted");
 });
+
