@@ -49,13 +49,11 @@ setInterval(postQuotes, 1000 * 60 * 60);
 
 const stream = T.stream("statuses/filter", {
   track: [
-    "#rustlang",
-    "javascript",
-    "nodejs",
-    "#javascript",
-    "#js",
-    "#vuejs",
-    "#vue",
+    "#SARSMUSTEND",
+    "#ENDSARS",
+    "SARS",
+    "#SARS",
+    "#EndPoliceBrutalityinNigeria"
   ],
   language: "en",
 });
