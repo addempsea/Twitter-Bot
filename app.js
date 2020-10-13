@@ -53,7 +53,8 @@ const stream = T.stream("statuses/filter", {
     "#ENDSARS",
     "SARS",
     "#SARS",
-    "#EndPoliceBrutalityinNigeria"
+    "#EndPoliceBrutalityinNigeria",
+    "#SarsMustGo"
   ],
   language: "en",
 });
