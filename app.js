@@ -49,6 +49,7 @@ setInterval(postQuotes, 1000 * 60 * 60);
 
 const stream = T.stream("statuses/filter", {
   track: [
+    "#ENDSWAT",
     "#SARSMUSTEND",
     "#ENDSARS",
     "SARS",
