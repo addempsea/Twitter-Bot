@@ -25,8 +25,9 @@ function postQuotes() {
     const r = Math.floor(Math.random() * (max - min)) + min;
 
     function tweetIt() {
+      const author = body[r].author ? body[r].author : 'unknown';
       const tweet = {
-        status: body[r].text + " - " + body[r].author,
+        status: body[r].text + " - " + author,
       };
       T.post("statuses/update", tweet, tweeted);
 
@@ -47,34 +48,35 @@ function postQuotes() {
 postQuotes();
 setInterval(postQuotes, 1000 * 60 * 60);
 
-const stream = T.stream("statuses/filter", {
-  track: [
-    "#SARSMUSTEND",
-    "#ENDSARS",
-    "SARS",
-    "#SARS",
-    "#EndPoliceBrutalityinNigeria",
-    "#SarsMustGo"
-  ],
-  language: "en",
-});
+// const stream = T.stream("statuses/filter", {
+//   track: [
+//     "#rustlang",
+//     "javascript",
+//     "nodejs",
+//     "#javascript",
+//     "#js",
+//     "#vuejs",
+//     "#vue",
+//   ],
+//   language: "en",
+// });
 
-function retweet(tweet) {
-  try {
-    T.post("statuses/retweet/:id", { id: tweet.id_str }, function (e, data, response) {
-      if (e) {
-        console.log(e.twitterReply);
-        console.log("something went wrong");
-      } else {
-        console.log("retweeted");
-      }
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
+// function retweet(tweet) {
+//   try {
+//     T.post("statuses/retweet/:id", { id: tweet.id_str }, function (e, data, response) {
+//       if (e) {
+//         console.log(e.twitterReply);
+//         console.log("something went wrong");
+//       } else {
+//         console.log("retweeted");
+//       }
+//     });
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
 
-stream.on("tweet", function (tweet) {
-  retweet(tweet);
-});
+// stream.on("tweet", function (tweet) {
+//   retweet(tweet);
+// });
 
