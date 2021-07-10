@@ -10,8 +10,17 @@ const T = new Twit({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
+function tweeted(error, data, response) {
+  if (error) {
+    console.log(error.twitterReply);
+    console.log("something went wrong");
+  } else {
+    console.log('Tweet sent');
+  }
+}
+
 function postQuotes() {
-  request("https://type.fit/api/quotes", { json: true }, function (
+  request("https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json", { json: true }, function (
     err,
     res,
     body
@@ -20,25 +29,11 @@ function postQuotes() {
       return console.log(err);
     }
 
-    const min = 1;
-    const max = 1643;
-    const r = Math.floor(Math.random() * (max - min)) + min;
-
     function tweetIt() {
       const tweet = {
-        status: body[r].text + " - " + body[r].author,
+        status: body.quoteText + " - " + `${body.quoteAuthor || 'Unknown'}` ,
       };
       T.post("statuses/update", tweet, tweeted);
-
-      function tweeted(err, data, response) {
-        if (err) {
-          console.log(err.twitterReply);
-          console.log("something went wrong");
-        } else {
-          tweetIt();
-          console.log("Tweet sent");
-        }
-      }
     }
     return tweetIt();
   });
