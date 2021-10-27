@@ -21,18 +21,18 @@ function tweeted(error, data, response) {
 
 function postQuotes() {
   request(
-    "https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json",
+    "https://zenquotes.io/api/random",
     { json: true },
-    function (err, res, body) {
+    function (err, res, [body]) {
       if (err) {
         return console.log(err);
       }
 
       function tweetIt() {
         const tweet = {
-          status: body.quoteText + " - " + `${body.quoteAuthor || "Unknown"}`,
+          status: body.q + " - " + `${body.a || "Unknown"}`,
         };
-        if (body.quoteText) {
+        if (body) {
           T.post("statuses/update", tweet, tweeted);
         } else {
           console.log("no quote found");
